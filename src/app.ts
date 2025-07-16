@@ -24,7 +24,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: process.env.NODE_ENV === 'production' ? 'https://your-domain.com' : `http://localhost:${process.env.PORT || 3000}`,
+        url: process.env.NODE_ENV === 'production' ? 'https://dse-stock-cnbcgtwed-auniik-dattas-projects.vercel.app' : `http://localhost:${process.env.PORT || 3000}`,
         description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server',
       },
     ],

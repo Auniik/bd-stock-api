@@ -9,12 +9,23 @@ This is a Bangladesh Stock Market Data API that scrapes data from the Dhaka Stoc
 ## Development Commands
 
 ### Building and Running
-- `npm run build` - Compiles TypeScript with watch mode
+- `npm run build` - Compiles TypeScript (production build)
+- `npm run build:watch` - Compiles TypeScript with watch mode
+- `npm run start` - Starts the compiled server (production)
 - `npm run start-server` - Starts the compiled server (requires build first)
 - `npm run dev` - Development mode with hot reload (uses tsc-watch)
 
 ### Testing
 - No test framework is currently configured (test script exits with error)
+
+## Deployment
+
+### Vercel
+- Configured for Vercel deployment with `vercel.json`
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Routes all requests to compiled Express app
+- Environment variables: Set `DSE_BASE_URL` and `PORT` in Vercel dashboard
 
 ## Architecture
 
