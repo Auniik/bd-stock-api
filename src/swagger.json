@@ -1,0 +1,337 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bangladesh Stock Market Data API 1",
+    "version": "1.0.0",
+    "description": "API for retrieving stock market data from Dhaka Stock Exchange (DSE). This API provides real-time and historical stock data by scraping information from the official DSE website.",
+    "contact": {
+      "name": "API Support",
+      "url": "https://github.com/auniik/bd-stock-api"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Development server"
+    },
+    {
+      "url": "/",
+      "description": "Current server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Test",
+      "description": "Test endpoints"
+    },
+    {
+      "name": "Stock Data",
+      "description": "Stock market data endpoints"
+    }
+  ],
+  "paths": {
+    "/v1/dse/hello": {
+      "get": {
+        "tags": ["Test"],
+        "summary": "Test endpoint",
+        "description": "Returns a hello world message to test API connectivity",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Hello World"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dse/latest": {
+      "get": {
+        "tags": ["Stock Data"],
+        "summary": "Get latest stock data",
+        "description": "Retrieves the latest stock market data from DSE including trading codes, prices, volumes, and trading statistics",
+        "responses": {
+          "200": {
+            "description": "Latest stock data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dse/dsexdata": {
+      "get": {
+        "tags": ["Stock Data"],
+        "summary": "Get DSEX data",
+        "description": "Fetches DSEX (Dhaka Stock Exchange) data with optional symbol filtering. DSEX is the broad market index of DSE.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "symbol",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Stock symbol to filter by (optional). Use trading code like 'SQUARE', 'ABBANK', etc.",
+            "example": "SQUARE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "DSEX data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dse/top30": {
+      "get": {
+        "tags": ["Stock Data"],
+        "summary": "Get top 30 stocks",
+        "description": "Retrieves the top 30 stock market data from DSE based on market performance and trading volume",
+        "responses": {
+          "200": {
+            "description": "Top 30 stock data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/dse/historical": {
+      "get": {
+        "tags": ["Stock Data"],
+        "summary": "Get historical stock data",
+        "description": "Retrieves historical stock data for a specified date range and instrument. Useful for analysis and backtesting.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Start date for historical data in YYYY-MM-DD format",
+            "example": "2024-01-01"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "End date for historical data in YYYY-MM-DD format",
+            "example": "2024-01-31"
+          },
+          {
+            "in": "query",
+            "name": "code",
+            "schema": {
+              "type": "string",
+              "default": "All Instrument"
+            },
+            "description": "Instrument code to filter by. Use 'All Instrument' for all stocks or specific trading code",
+            "example": "SQUARE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required parameters (start and end dates)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was successful",
+            "example": true
+          },
+          "data": {
+            "type": "array",
+            "description": "Array of stock data objects",
+            "items": {
+              "$ref": "#/components/schemas/StockData"
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": ""
+          }
+        },
+        "required": ["success", "data", "message"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was successful",
+            "example": false
+          },
+          "data": {
+            "type": "array",
+            "description": "Empty array on error",
+            "example": []
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Internal server error"
+          }
+        },
+        "required": ["success", "data", "message"]
+      },
+      "StockData": {
+        "type": "object",
+        "description": "Stock market data object with trading information",
+        "properties": {
+          "TRADING CODE": {
+            "type": "string",
+            "description": "The unique identifier of the stock in the market",
+            "example": "SQUARE"
+          },
+          "LTP*": {
+            "type": "string",
+            "description": "Last Traded Price - The latest price at which the stock was traded",
+            "example": "245.50"
+          },
+          "HIGH": {
+            "type": "string",
+            "description": "The highest price at which the stock traded for the day",
+            "example": "250.00"
+          },
+          "LOW": {
+            "type": "string",
+            "description": "The lowest price for the stock in the day",
+            "example": "240.00"
+          },
+          "CLOSEP*": {
+            "type": "string",
+            "description": "Closing Price - The price at which the stock ended the trading day",
+            "example": "245.50"
+          },
+          "YCP*": {
+            "type": "string",
+            "description": "Yesterday's Closing Price",
+            "example": "243.20"
+          },
+          "CHANGE": {
+            "type": "string",
+            "description": "How much the stock has gained or lost compared to the previous day",
+            "example": "+2.30"
+          },
+          "TRADE": {
+            "type": "string",
+            "description": "Total number of trades for the stock",
+            "example": "1,234"
+          },
+          "VALUE (mn)": {
+            "type": "string",
+            "description": "Total monetary value of all trades in millions",
+            "example": "45.67"
+          },
+          "VOLUME": {
+            "type": "string",
+            "description": "The total number of shares that were traded",
+            "example": "185,673"
+          }
+        }
+      }
+    }
+  }
+}

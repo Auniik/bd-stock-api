@@ -91,7 +91,8 @@ src/
 ### API Documentation
 - **Swagger UI** available at `/api-docs` endpoint
 - Interactive API documentation with request/response examples
-- All endpoints documented with OpenAPI 3.0 specification
+- OpenAPI 3.0 specification defined in `src/swagger.json`
+- Comprehensive documentation with detailed descriptions, examples, and schemas
 
 ### Development Notes
 - TypeScript configuration includes decorator support

@@ -6,15 +6,16 @@
     "allowJs": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
-    "outDir": "./dist/src",
+    "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "api/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
