@@ -15,10 +15,6 @@
   "servers": [
     {
       "url": "/",
-      "description": "Development server"
-    },
-    {
-      "url": "/",
       "description": "Current server"
     }
   ],

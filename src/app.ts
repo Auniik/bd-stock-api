@@ -24,8 +24,28 @@ const expressApp = createExpressServer({
   middlewares: [GlobalErrorHandler],
 });
 
-// Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Swagger UI with dynamic server URL
+app.use("/api-docs", swaggerUi.serve, (req, res, next) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  const baseUrl = `${protocol}://${host}`;
+  
+  const dynamicSwaggerDoc = {
+    ...swaggerDocument,
+    servers: [
+      {
+        url: baseUrl,
+        description: "Current server"
+      },
+      {
+        url: `http://localhost:${process.env.PORT}`,
+        description: "Development server"
+      }
+    ]
+  };
+  
+  swaggerUi.setup(dynamicSwaggerDoc)(req, res, next);
+});
 
 // Use the routing-controllers app as middleware in the express app
 app.use(expressApp);
