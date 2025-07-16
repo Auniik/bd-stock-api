@@ -103,7 +103,9 @@ export class StockDataService {
       if (symbol) {
         data = data.filter(
           (d) =>
-            d["Symbol"] && d["Symbol"].toUpperCase() === symbol.toUpperCase()
+          {
+            return d['TRADING CODE'] && d['TRADING CODE'].toUpperCase() === symbol.toUpperCase();
+          }
         );
       }
       return data;
